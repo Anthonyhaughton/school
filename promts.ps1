@@ -1,56 +1,65 @@
-# Anthony Haughton                      # Student ID:
+# Anthony Haughton          # Student ID: 
 
-
+# Prompt user until 5 key is presssed
 do {
     # Display menu
     Write-Host "Menu:"
     Write-Host "1. List .log files in folder"
-    Write-Host "2. List filesin folder in alphabetical order"
-    Write-Host "3. Show current CPU and memory usage"
-    Write-Host "4. List all running processes"
+    Write-Host "2. List files in folder in alphabetical order"
+    Write-Host "3. Show CPU and memory usage"
+    Write-Host "4. List running processes by size"
     Write-Host "5. Exit"
 
-}
+    # Get user input
+    $choice = Read-Host "Enter your choice"
 
-do {
-    Write-Host "Select an option:"
-    Write-Host "1. Activity One"
-    Write-Host "2. Activity Two"
-    Write-Host "3. Activity Three"
-    Write-Host "4. Activity Four"
-    Write-Host "5. Exit"
-    
-    # Prompt the user for input
-    $choice = Read-Host "Enter your selection (1-5)"
-
+    # Process user input
     switch ($choice) {
-        "1" {
-            Write-Host "You selected Activity One."
-            # Place code for Activity One here.
+        1 {
+            # B1: List .log files in folder with current date and output to DailyLog.txt
+            $logFiles = Get-ChildItem -Filter "*.log" | Select-Object -ExpandProperty Name
+            $logFilesWithDate = "$(Get-Date) - $($logFiles -join ', ')"
+            Add-Content -Path ".\DailyLog.txt" -Value $logFilesWithDate
         }
-        "2" {
-            Write-Host "You selected Activity Two."
-            # Place code for Activity Two here.
+        2 {
+            # B2: List files in folder in alphabetical order and output to C916contents.txt
+            $files = Get-ChildItem | Select-Object Name
+            $files | Sort-Object -Property Name | Format-Table -AutoSize | Out-File -FilePath ".\C916contents.txt"
         }
-        "3" {
-            Write-Host "You selected Activity Three."
-            # Place code for Activity Three here.
+        3 {
+            # B3: Show CPU and memory usage
+            $cpu = Get-CimInstance -Class Win32_Processor | Select-Object -ExpandProperty LoadPercentage
+            $memory = Get-CimInstance -Class Win32_OperatingSystem | Select-Object -Property FreePhysicalMemory, TotalVisibleMemorySize
+
+            Write-Host "CPU Usage: $cpu%"
+            Write-Host "Free Physical Memory: $($memory.FreePhysicalMemory) KB"
+            Write-Host "Total Visible Memory: $($memory.TotalVisibleMemorySize) KB"
         }
-        "4" {
-            Write-Host "You selected Activity Four."
-            # Place code for Activity Four here.
+        4 {
+            # B4: List running processes sorted by size
+            Get-Process | Sort-Object -Property VM | Format-Table -Autosize | Out-String
         }
-        "5" {
-            Write-Host "Exiting the program. Goodbye!"
-            # Optionally, you could also use "break" here to exit the loop immediately.
+        5 {
+            # B5: Break the loop and stop the script
             break
         }
         default {
-            Write-Host "Invalid selection. Please try again."
+            # If 1-5 not selected
+            Write-Host "Invalid Choice! Please try again."
         }
     }
-
-    # Optionally add a blank line for better readability between iterations.
-    Write-Host ""
-
 } while ($choice -ne "5")
+
+# Exception handling for System.OutOfMemoryException
+try {
+    # Step D: Your code that may throw an OutOfMemoryException
+}
+catch [System.OutOfMemoryException] {
+    Write-Host "An OutOfMemoryException occurred!"
+}
+
+#Take screenshots and save them in Requirements folder
+#Step E: Code to capture screenshots goes here
+
+#Compress all files in folder to a ZIP archive
+Compress-Archive -Path ".\Requirements1\" -Destination ".\Requirements1.zip"
