@@ -32,8 +32,8 @@ do {
             $memory = Get-CimInstance -Class Win32_OperatingSystem | Select-Object -Property FreePhysicalMemory, TotalVisibleMemorySize
 
             Write-Host "CPU Usage: $cpu%"
-            Write-Host "Free Physical Memory: $($memory.FreePhysicalMemory) KB"
-            Write-Host "Total Visible Memory: $($memory.TotalVisibleMemorySize) KB"
+            Write-Host "Free Memory: $($memory.FreePhysicalMemory) KB"
+            Write-Host "Total Memory: $($memory.TotalVisibleMemorySize) KB"
         }
         4 {
             # B4: List running processes sorted by size
