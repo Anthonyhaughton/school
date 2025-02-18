@@ -61,5 +61,5 @@ catch [System.OutOfMemoryException] {
 #Take screenshots and save them in Requirements folder
 #Step E: Code to capture screenshots goes here
 
-#Compress all files in folder to a ZIP archive
-Compress-Archive -Path ".\Requirements1\" -Destination ".\Requirements1.zip"
+# Compress all files in folder to a ZIP archive
+Compress-Archive -Path ".\" -Destination ".\"
