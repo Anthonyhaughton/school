@@ -39,10 +39,18 @@ do {
             # B4: List running processes sorted by size
             #Get-Process | Sort-Object -Property VM | Format-Table -Autosize | Out-String
             #Get-Process | Sort-Object -Property VM | Out-GridView -Title "Running Processes (Sorted by VM Size)"
+            # # List running processes sorted by Virtual Memory (VM) size (least to greatest)
+            # Get-Process | 
+            #     Sort-Object -Property VM | 
+            #     Select-Object ProcessName, Id, VM, WS |
+            #     Format-Table -AutoSize
+
             # List running processes sorted by Virtual Memory (VM) size (least to greatest)
             Get-Process | 
                 Sort-Object -Property VM | 
-                Select-Object ProcessName, Id, VM, WS |
+                Select-Object ProcessName, Id, 
+                    @{Name="VM (MB)"; Expression={"{0:N2}" -f ($_.VM / 1MB)}}, 
+                    @{Name="WS (MB)"; Expression={"{0:N2}" -f ($_.WS / 1MB)}} |
                 Format-Table -AutoSize
         }
         5 {
