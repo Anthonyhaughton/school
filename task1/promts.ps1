@@ -38,6 +38,7 @@ do {
         4 {
             # B4: List running processes sorted by size
             Get-Process | Sort-Object -Property VM | Format-Table -Autosize | Out-String
+            #Get-Process | Sort-Object -Property VM | Out-GridView -Title "Running Processes (Sorted by VM Size)"
         }
         5 {
             # B5: Break the loop and stop the script
