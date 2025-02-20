@@ -36,10 +36,7 @@ do {
             Write-Host "Total Memory: $($memory.TotalVisibleMemorySize) KB"
         }
         4 {
-            # B4: List running processes sorted by size
-            #Get-Process | Sort-Object -Property VM | Format-Table -Autosize | Out-String
-            #Get-Process | Sort-Object -Property VM | Out-GridView -Title "Running Processes (Sorted by VM Size)"
-            # List running processes sorted by Virtual Memory (VM) size (least to greatest)
+            # B4: List running processes sorted by Virtual Memory (VM) size (least to greatest)
             Get-Process | 
                 Sort-Object -Property VM | 
                 Select-Object ProcessName, Id, VM, WS |
