@@ -1,11 +1,11 @@
 # Anthony Haughton         Student ID:
 
 try {
-    $sqlInstanceName = "SRV19-PRIMARY\SQLEXPRESS"
+    $sqlServerInstanceName = "SRV19-PRIMARY\SQLEXPRESS"
     $databaseName = "ClientDB"
 
     # D1. Check for the existence of the database
-    $databaseExists = Invoke-Sqlcmd -ServerInstance $sqlInstanceName -Query "SELECT COUNT(*) FROM sys.databases WHERE name = '$databaseName'"
+    $databaseExists = Invoke-Sqlcmd -ServerInstance $sqlServerInstanceName -Query "SELECT COUNT(*) FROM sys.databases WHERE name = '$databaseName'"
     
     if ($databaseExists -eq 1) {
         Write-Host "The database '$databaseName' already exists. Deleting it..."
