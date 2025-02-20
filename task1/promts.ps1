@@ -44,10 +44,6 @@ do {
                 Sort-Object -Property VM | 
                 Select-Object ProcessName, Id, VM, WS |
                 Format-Table -AutoSize
-    }
-
-    # Sort by Process ID and display in a Grid View
-    $ProcessList | Sort-Object -Property ProcessID | Out-GridView -Title "Processes and Associated Virtual Machines"
         }
         5 {
             # B5: Break the loop and stop the script
