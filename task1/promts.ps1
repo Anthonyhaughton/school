@@ -42,9 +42,7 @@ do {
             # List running processes sorted by Virtual Memory (VM) size (least to greatest)
             Get-Process | 
                 Sort-Object -Property VM | 
-                Select-Object ProcessName, Id, 
-                    @{Name="VM (GB)"; Expression={"{0:N3} GB" -f ($_.VM / 1GB)}}, 
-                    @{Name="WS (GB)"; Expression={"{0:N3} GB" -f ($_.WS / 1GB)}} |
+                Select-Object ProcessName, Id, VM, WS |
                 Format-Table -AutoSize
                 }
         5 {
