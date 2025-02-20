@@ -37,8 +37,38 @@ do {
         }
         4 {
             # B4: List running processes sorted by size
-            Get-Process | Sort-Object -Property VM | Format-Table -Autosize | Out-String
+            #Get-Process | Sort-Object -Property VM | Format-Table -Autosize | Out-String
             #Get-Process | Sort-Object -Property VM | Out-GridView -Title "Running Processes (Sorted by VM Size)"
+            # Get all running processes and attempt to map them to their VM
+            $Processes = Get-Process | Sort-Object -Property Id
+        
+            # Get the list of running VMs
+            $VMs = Get-VM | Select-Object Name, Id
+        
+            # Create an array to store process-VM mapping
+            $ProcessList = @()
+        
+            foreach ($process in $Processes) {
+                # Find if the process is running inside a VM
+                $vmName = ($VMs | Where-Object { $_.Id -eq $process.Id }).Name
+        
+                # If no VM is found, assume it's running on the host
+                if (-not $vmName) {
+                    $vmName = "Host Machine"
+        }
+
+        # Add process details to the list
+        $ProcessList += [PSCustomObject]@{
+            ProcessName = $process.ProcessName
+            ProcessID = $process.Id
+            VMName = $vmName
+            CPU = $process.CPU
+            Memory = $process.WorkingSet
+        }
+    }
+
+    # Sort by Process ID and display in a Grid View
+    $ProcessList | Sort-Object -Property ProcessID | Out-GridView -Title "Processes and Associated Virtual Machines"
         }
         5 {
             # B5: Break the loop and stop the script
