@@ -5,14 +5,17 @@ try {
     $databaseName = "ClientDB"
 
     # D1. Check for the existence of the database
-    $databaseExists = Invoke-Sqlcmd -ServerInstance $sqlServerInstanceName -Query "SELECT COUNT(*) FROM sys.databases WHERE name = '$databaseName'"
+    $databaseCount = (Invoke-Sqlcmd -ServerInstance $sqlServerInstanceName -Query "SELECT COUNT(*) AS DatabaseCount FROM sys.databases WHERE name = '$databaseName'").DatabaseCount
     
-    if ($databaseExists -eq 1) {
+    if ($databaseCount -eq 1) {
         Write-Host "The database '$databaseName' already exists. Deleting it..."
-        Invoke-Sqlcmd -ServerInstance $sqlServerInstanceName -Query "DROP DATABASE [$databaseName]"
+        # Force disconnect any active connections
+        Invoke-Sqlcmd -ServerInstance $sqlServerInstanceName -Query "ALTER DATABASE [$databaseName] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;"
+        # Drop the database
+        Invoke-Sqlcmd -ServerInstance $sqlServerInstanceName -Query "DROP DATABASE [$databaseName];"
         Write-Host "The database '$databaseName' has been deleted."
     }
-    
+        
     # D2. Create the new database
     Write-Host "Creating the database '$databaseName'..."
     Invoke-Sqlcmd -ServerInstance $sqlServerInstanceName -Query "CREATE DATABASE [$databaseName]"
